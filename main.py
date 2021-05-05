@@ -5,122 +5,169 @@ import msvcrt
 import os
 
 def show_screen(menu, option):
-    if      (menu == 0 and option == -1):  #Inicio/Voltar/Sair     ~
+    if      (menu == 0):  #Inicio/Voltar/Sair     ~
+        if (option == -1):
 
-        head()
-        print("\n"+"[ MENU ]".center(os.get_terminal_size().columns))
-        print("\n                 1 -> Iniciar Bot")
-        print("                 2 -> Histórico de contas")
-        print("                 3 -> Alterar config.txt")
-        print("                 4 -> Configurações")
-        print("\n")
-        print("                 0 ->    Sair")
+            head()
+            print("\n"+"[ MENU ]".center(os.get_terminal_size().columns))
+            print("\n                 1 -> Iniciar Bot")
+            print("                 2 -> Histórico de contas")
+            print("                 3 -> Alterar config.txt")
+            print("                 4 -> Configurações")
+            print("\n")
+            print("                 0 ->    Sair")
 
-        _option = Input()
-        if (_option != 0):
-            show_screen(_option, -1)
-        else:
+            _option = Input()
+            if (_option != 0):
+                show_screen(_option, -1)
+            else:
+                return
+            #Iniciar Bot        -> Qtd contas a criar
+            #                   -> Revisar configurações
+
+            #Configurações      -> Toggle VPN
+            #                   -> Toggle Limpar Cache/Cookies
+            #                   -> Retry captcha
+
+    elif    (menu == 1):  #Iniciar Bot            ~
+        if (option == -1):
+
+            clear()
+            import account_creator
             return
-        #Iniciar Bot        -> Qtd contas a criar
-        #                   -> Revisar configurações
 
-        #Configurações      -> Toggle VPN
-        #                   -> Toggle Limpar Cache/Cookies
-        #                   -> Retry captcha
+    elif    (menu == 2):  #Historico              ~
+        if (option == -1):
 
-    elif    (menu == 1 and option == -1):  #Iniciar Bot            ~
-
-        clear()
-        import account_creator
-        return
-
-    elif    (menu == 2 and option == -1):  #Historico              ~
-
-        head()
-        print("\n"+"[ HISTORICO ]".center(os.get_terminal_size().columns))
-        _option = Input()
-        if (_option != 0):
-            show_screen(_option, -1)
-        else:
-            show_screen(0, -1)
+            head()
+            print("\n"+"[ HISTORICO ]".center(os.get_terminal_size().columns))
+            _option = Input()
+            if (_option != 0):
+                show_screen(_option, -1)
+            else:
+                show_screen(0, -1)
+                return
             return
-        return
 
-    elif    (menu == 3 and option == -1):  #Alterar config.txt     ~
-        head()
-        config = open("config.txt", "r")
-        lines = config.readlines()
+    elif    (menu == 3):  #Alterar config.txt     ~
+        if (option == -1): #Tela principal (Alterar config.txt)
 
-        vpn_check = return_cfg("vpn")
-        if(vpn_check):
-            vpn_check = "X"
-        else:
-            vpn_check = " "
+            head()
+            config = open("config.txt", "r")
+            lines = config.readlines()
 
-        clear_browser_check = return_cfg("clear_browser")
-        if(clear_browser_check):
-            clear_browser_check = "X"
-        else:
-            clear_browser_check = " "
+            vpn_check = return_cfg("vpn")
+            if(vpn_check):
+                vpn_check = "X"
+            else:
+                vpn_check = " "
 
-        retry_captcha_check = return_cfg("retry_captcha")
-        if(retry_captcha_check):
-            retry_captcha_check = "X"
-        else:
-            retry_captcha_check = " "
+            clear_browser_check = return_cfg("clear_browser")
+            if(clear_browser_check):
+                clear_browser_check = "X"
+            else:
+                clear_browser_check = " "
+
+            retry_captcha_check = return_cfg("retry_captcha")
+            if(retry_captcha_check):
+                retry_captcha_check = "X"
+            else:
+                retry_captcha_check = " "
+            
+            print("\n"+"[ CONFIGURAÇÕES ]".center(os.get_terminal_size().columns))
+            print("\n               1 -> CHANGE CHROMEDRIVER PATH")
+            print("               2 -> CHANGE API_KEY")
+            print("               3 -> VPN                    ["+vpn_check+"]")
+            print("               4 -> LIMPAR CACHE E COOKIES ["+clear_browser_check+"]")
+            print("               5 -> RETRY CAPTCHA          ["+retry_captcha_check+"]")
+            print("\n")
+            print("              0 ->    Voltar")
+            _option = Input()
+            if   (_option == 1):
+                show_screen(3,1)
+                return
+            elif (_option == 2):
+                show_screen(3,2)
+                return
+            elif (_option == 3):
+                if(vpn_check == "X"):
+                    lines[2] = "vpn='False'\n"
+                else:
+                    lines[2] = "vpn='True'\n"
+                config = open("config.txt", "w")
+                config.writelines(lines)
+                config.close()
+                show_screen(3, -1)
+                return
+            elif (_option == 4):
+                if(clear_browser_check == "X"):
+                    lines[3] = "clear_browser='False'\n"
+                else:
+                    lines[3] = "clear_browser='True'\n"
+                config = open("config.txt", "w")
+                config.writelines(lines)
+                config.close()
+                show_screen(3, -1)
+                return
+            elif (_option == 5):
+                if(retry_captcha_check == "X"):
+                    lines[4] = "retry_captcha='False'"
+                else:
+                    lines[4] = "retry_captcha='True'"
+                config = open("config.txt", "w")
+                config.writelines(lines)
+                config.close()
+                show_screen(3, -1)
+                return
+            elif (_option == 0):
+                show_screen(0, -1)
+                return
+            else:
+                return ################################# ALTERAR ###################################
         
-        print("\n"+"[ CONFIGURAÇÕES ]".center(os.get_terminal_size().columns))
-        print("\n               1 -> CHANGE CHROMEDRIVER PATH")
-        print("               2 -> CHANGE API_KEY")
-        print("               3 -> VPN                    ["+vpn_check+"]")
-        print("               4 -> LIMPAR CACHE E COOKIES ["+clear_browser_check+"]")
-        print("               5 -> RETRY CAPTCHA          ["+retry_captcha_check+"]")
-        print("\n")
-        print("              0 ->    Voltar")
-        _option = Input()
-        if   (_option == 1):
+        elif (option == 1): #Alterar path
 
-            return
-        elif (_option == 2):
+            head()
+            config = open("config.txt", "r")
+            lines = config.readlines()
 
-            return
-        elif (_option == 3):
-            if(vpn_check == "X"):
-                lines[2] = "vpn='False'\n"
+            print("\n"+"[ CHROMEDRIVER PATH ]".center(os.get_terminal_size().columns))
+            print("\n"+bg(15)+cBlack+return_cfg("path").center(os.get_terminal_size().columns)+cReset)
+            print("1 -> Inserir         2 -> Default          0 -> Voltar".center(os.get_terminal_size().columns))
+            _option = Input()
+            if (_option == 1):
+                print("INSERT: ")
+                _path = input()
+                config = open("config.txt", "w")
+                lines[0] = "PATH='"+_path+"\chromedriver.exe'\n"
+                config.writelines(lines)
+                config.close()
+                show_screen(3, 1)
+            elif(_option == 2):
+                config = open("config.txt", "w")
+                lines[0] = "PATH='"+os.getcwd()+"\chromedriver.exe'\n"
+                print(lines)
+                config.writelines(lines)
+                config.close()
+                show_screen(3, 1)                
+            elif (_option == 0):
+                show_screen(3, -1)
+                return
             else:
-                lines[2] = "vpn='True'\n"
-            config = open("config.txt", "w")
-            config.writelines(lines)
-            config.close()
-            show_screen(3, -1)
-            return
-        elif (_option == 4):
-            if(clear_browser_check == "X"):
-                lines[3] = "clear_browser='False'\n"
-            else:
-                lines[3] = "clear_browser='True'\n"
-            config = open("config.txt", "w")
-            config.writelines(lines)
-            config.close()
-            show_screen(3, -1)
-            return
-        elif (_option == 5):
-            if(retry_captcha_check == "X"):
-                lines[4] = "retry_captcha='False'"
-            else:
-                lines[4] = "retry_captcha='True'"
-            config = open("config.txt", "w")
-            config.writelines(lines)
-            config.close()
-            show_screen(3, -1)
-            return
-        elif (_option == 0):
-            show_screen(0, -1)
-            return
+                return ################################# ALTERAR ###################################
+            
+        elif (option == 2): #Alterar api key
 
+            head()
+            print("\n"+"[ API KEY ]".center(os.get_terminal_size().columns))
+            _option = Input()
 
-    elif    (menu == 4 and option == -1):  #Configurações          ~
-        return
+    elif    (menu == 4):  #Configurações          ~
+        if (option == -1):
+            return
+    
+    else:
+        return ################################# ALTERAR ###################################
 
 def Input():
     _input = 1
