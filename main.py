@@ -4,8 +4,8 @@ import time
 import msvcrt
 import os
 
-def show_screen(screen):
-    if      (screen == 0):  #Inicio/Voltar/Sair     ~
+def show_screen(menu, option):
+    if      (menu == 0 and option == -1):  #Inicio/Voltar/Sair     ~
         head()
 
         print("\n"+"[ MENU ]".center(os.get_terminal_size().columns))
@@ -16,9 +16,9 @@ def show_screen(screen):
         print("\n")
         print("                 0 ->    Sair")
 
-        _exit = Input()
-        if (_exit != 0):
-            show_screen(_exit)
+        _option = Input()
+        if (_option != 0):
+            show_screen(_option, -1)
         else:
             return
         #Iniciar Bot        -> Qtd contas a criar
@@ -28,23 +28,28 @@ def show_screen(screen):
         #                   -> Toggle Limpar Cache/Cookies
         #                   -> Retry captcha
 
-    elif    (screen == 1):  #Iniciar Bot            ~
+    elif    (menu == 1 and option == -1):  #Iniciar Bot            ~
         clear()
         import account_creator
         return
 
-    elif    (screen == 2):  #Historico              ~
+    elif    (menu == 2 and option == -1):  #Historico              ~
         head()
 
         print("\n"+"[ HISTORICO ]".center(os.get_terminal_size().columns))
-        show_screen(Input())
+        _option = Input()
+        if (_option != 0):
+            show_screen(_option, -1)
+        else:
+            show_screen(0, -1)
+            return
 
         return
 
-    elif    (screen == 3):  #Alterar config.txt     ~
+    elif    (menu == 3 and option == -1):  #Alterar config.txt     ~
         return
 
-    elif    (screen == 4):  #Configurações          ~
+    elif    (menu == 4 and option == -1):  #Configurações          ~
         return
 
 def Input():
@@ -115,7 +120,6 @@ def check_cfg():
         config.close()
         return 1
 
-
 #Cores do console
 cBlack = fg(0) #Preto
 cError = fg(1) #Vermelho
@@ -129,7 +133,7 @@ clear = lambda: os.system('cls')
 os.system(cmd)
 if (check_cfg() == 1):
     time.sleep(1)
-    show_screen(0)
+    show_screen(0, -1)
 else:
     print(cError+get_time()+"Encerrando..."+cReset)
     time.sleep(3)
