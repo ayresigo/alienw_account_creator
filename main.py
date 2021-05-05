@@ -12,8 +12,7 @@ def show_screen(menu, option):
             print("\n"+"[ MENU ]".center(os.get_terminal_size().columns))
             print("\n                 1 -> Iniciar Bot")
             print("                 2 -> Histórico de contas")
-            print("                 3 -> Alterar config.txt")
-            print("                 4 -> Configurações")
+            print("                 3 -> Alterar configurações")
             print("\n")
             print("                 0 ->    Sair")
 
@@ -33,7 +32,7 @@ def show_screen(menu, option):
         if (option == -1):
 
             clear()
-            import account_creator
+            import account_creator_new
             return
 
     elif    (menu == 2):  #Historico              ~
@@ -146,7 +145,6 @@ def show_screen(menu, option):
             elif(_option == 2):
                 config = open("config.txt", "w")
                 lines[0] = "PATH='"+os.getcwd()+"\chromedriver.exe'\n"
-                print(lines)
                 config.writelines(lines)
                 config.close()
                 show_screen(3, 1)                
@@ -160,7 +158,26 @@ def show_screen(menu, option):
 
             head()
             print("\n"+"[ API KEY ]".center(os.get_terminal_size().columns))
+            print("\n"+bg(15)+cBlack+return_cfg("apikey").center(os.get_terminal_size().columns)+cReset)
+            print("1 -> Alterar                   0 -> Voltar".center(os.get_terminal_size().columns))
             _option = Input()
+            if (_option == 1):
+                print("INSERT: ")
+                _api_key = input()
+                if (len(_api_key) == 32):
+                    config = open("config.txt", "w")
+                    lines[1] = "api_key='"+_api_key+"'\n"
+                    config.writelines(lines)
+                    config.close()
+                    show_screen(3, 2)
+                else:
+                    print(cError+get_time()+"API KEY inválida."+cReset)
+                    time.sleep(2)
+                    show_screen(3, 2)
+            elif (_option == 0):
+                show_screen(3, -1)
+            else:
+                return ################################# ALTERAR ###################################
 
     elif    (menu == 4):  #Configurações          ~
         if (option == -1):
@@ -198,6 +215,18 @@ def head():
 def get_time(): #Pega o timestamp pelo horário atual.
     now = datetime.now()
     return "[ " + now.strftime("%H:%M:%S") + " ] "
+
+def config_captcha(api_key):
+    config_ac_api_key = open(os.getcwd()+"\essentials\Anticaptcha-plugin_v0.53\js\config_ac_api_key.js","r")
+    content = config_ac_api_key.readlines()
+    content[2] =    "var antiCapthaPredefinedApiKey = '"+api_key+"';\n"
+    content[8] =    "    auto_submit_form: true,\n"
+    content[30] =   "    use_recaptcha_precaching: true,\n"
+
+    config_ac_api_key = open(os.getcwd()+"\essentials\Anticaptcha-plugin_v0.53\js\config_ac_api_key.js","w")
+    config_ac_api_key.writelines(content)
+    config_ac_api_key.close()
+    return
 
 def return_cfg(cfg):
     if (check_cfg() != 0):
@@ -265,7 +294,7 @@ def check_cfg():
     except OSError:
         time.sleep(2)
         print(cMessage+get_time()+"Gerando novo arquivo config.txt..."+cReset)
-        print(cMessage+get_time()+"PATH='"+cWarning+os.getcwd()+"\chromedriver.exe'"+cReset)
+        print(cMessage+get_time()+"PATH='"+cWarning+os.getcwd()+"\essentials\chromedriver.exe'"+cReset)
         print(cMessage+get_time()+"api_key="+cReset)
         time.sleep(1)
 
@@ -280,8 +309,9 @@ def check_cfg():
             print(cMessage+get_time()+"vpn="+cWarning+"'True'"+cMessage+"\n"+get_time()+"clear_browser="+cWarning+"'True'"+cMessage+"\n"+get_time()+"retry_captcha="+cWarning+"'True'"+cReset)
             config = open("config.txt", "w+")
             time.sleep(1)
-            config.write("PATH='"+os.getcwd()+"\chromedriver.exe'\napi_key='"+api__key+"'\nvpn='True'\nclear_browser='True'\nretry_captcha='True'")
+            config.write("PATH='"+os.getcwd()+"\essentials\chromedriver.exe'\napi_key='"+api__key+"'\nvpn='True'\nclear_browser='True'\nretry_captcha='True'")
             config.close()
+            config_captcha(api__key)
             return 1
     except:
         print(cError+get_time()+"Erro inesperado. Encerrando..."+cReset)
@@ -307,39 +337,3 @@ if (check_cfg() == 1):
 else:
     print(cError+get_time()+"Encerrando..."+cReset)
     time.sleep(3)
-
-
-
-
-
-
-
-
-"""
-def main_menu():
-    
-    
-    #print(char)
-
-def iniciar_bot():
-    head()
-    operator2 = 1
-    print("Pagina incial")
-    operator2 = msvcrt.getch().decode("utf-8").lower()
-    while(operator2 != 5):
-        if (operator2 == 0):
-            print("Returning...")
-            main_menu()
-    
-def historico():
-    return
-
-def alterar_config():
-    return
-
-def configuracoes():
-    return
-
-"""
-
-

@@ -1,4 +1,4 @@
-PATH='D:\Github\aw_account_creator\chromedriver.exe'
+PATH='D:\GitHub\alienw_account_creator\chromedriver.exe'
 api_key='52f971f1abceb987e25cbad14eb79b98'
 vpn='True'
 clear_browser='True'

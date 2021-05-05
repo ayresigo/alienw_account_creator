@@ -1,4 +1,4 @@
-py get-pip.py
+py essentials/get-pip.py
 
 pip install selenium
 pip install python_anticaptcha
