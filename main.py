@@ -49,6 +49,11 @@ def show_screen(menu, option):
             return
 
     elif    (menu == 3):  #Alterar config.txt     ~
+
+            #TODO:
+            # Toggle random password
+            # Toggle random email
+
         if (option == -1): #Tela principal (Alterar config.txt)
 
             head()
@@ -66,19 +71,32 @@ def show_screen(menu, option):
                 clear_browser_check = "X"
             else:
                 clear_browser_check = " "
+            
+            random_mail_check = return_cfg("random_mail")
+            if(random_mail_check != ""):
+                random_mail_check = "X"
+            else:
+                random_mail_check = " "
+
+            random_pw_check = return_cfg("random_pw")
+            if(random_pw_check != ""):
+                random_pw_check = "X"
+            else:
+                random_pw_check = " "
 
             retry_captcha_check = return_cfg("retry_captcha")
             if(retry_captcha_check):
                 retry_captcha_check = "X"
             else:
                 retry_captcha_check = " "
-            
             print("\n"+"[ CONFIGURAÇÕES ]".center(os.get_terminal_size().columns))
-            print("\n               1 -> CHANGE CHROMEDRIVER PATH")
-            print("               2 -> CHANGE API_KEY")
+            print("\n               1 -> TROCAR CHROMEDRIVER PATH")
+            print("               2 -> TROCAR API_KEY")
             print("               3 -> VPN                    ["+vpn_check+"]")
             print("               4 -> LIMPAR CACHE E COOKIES ["+clear_browser_check+"]")
-            print("               5 -> RETRY CAPTCHA          ["+retry_captcha_check+"]")
+            print("               5 -> GERAR EMAIL ALEATÓRIO  ["+random_mail_check+"]")
+            print("               6 -> GERAR SENHA ALEATÓRIA  ["+random_pw_check+"]")
+            print("               7 -> RETRY CAPTCHA          ["+retry_captcha_check+"]")
             print("\n")
             print("              0 ->    Voltar")
             _option = Input()
@@ -107,8 +125,29 @@ def show_screen(menu, option):
                 config.writelines(lines)
                 config.close()
                 show_screen(3, -1)
-                return
+                return            
             elif (_option == 5):
+                if(random_mail_check == "X"):
+                    lines[5] = "random_mail=''\n"
+                else:
+                    show_screen(3, 5)
+                config = open("config.txt", "w")
+                config.writelines(lines)
+                config.close()
+                show_screen(3, -1)
+                return
+            elif (_option == 6):
+                if(random_pw_check == "X"):
+                    lines[6] = "random_pw=''\n"
+                else:
+                    show_screen(3, 6)
+                config = open("config.txt", "w")
+                config.writelines(lines)
+                config.close()
+                show_screen(3, -1)
+                return
+
+            elif (_option == 7): ############################## REVER #########################
                 if(retry_captcha_check == "X"):
                     lines[4] = "retry_captcha='False'"
                 else:
@@ -142,12 +181,14 @@ def show_screen(menu, option):
                 config.writelines(lines)
                 config.close()
                 show_screen(3, 1)
+                return
             elif(_option == 2):
                 config = open("config.txt", "w")
                 lines[0] = "PATH='"+os.getcwd()+"\chromedriver.exe'\n"
                 config.writelines(lines)
                 config.close()
-                show_screen(3, 1)                
+                show_screen(3, 1)
+                return             
             elif (_option == 0):
                 show_screen(3, -1)
                 return
@@ -170,12 +211,65 @@ def show_screen(menu, option):
                     config.writelines(lines)
                     config.close()
                     show_screen(3, 2)
+                    return
                 else:
                     print(cError+get_time()+"API KEY inválida."+cReset)
                     time.sleep(2)
                     show_screen(3, 2)
+                    return
             elif (_option == 0):
                 show_screen(3, -1)
+                return
+            else:
+                return ################################# ALTERAR ###################################
+
+        elif (option == 5): #Alterar email random
+
+            head()
+            config = open("config.txt", "r")
+            lines = config.readlines()
+
+            print("\n"+"[ SET EMAIL ]".center(os.get_terminal_size().columns))
+            print("\n"+bg(15)+cBlack+return_cfg("random_mail").center(os.get_terminal_size().columns)+cReset)
+            print("1 -> Alterar                   0 -> Voltar".center(os.get_terminal_size().columns))
+            _option = Input()
+            if (_option == 1):
+                print("INSERT: ")
+                _random_mail = input()
+                config = open("config.txt", "w")
+                lines[5] = "random_mail='"+_random_mail+"'\n"
+                config.writelines(lines)
+                config.close()
+                show_screen(3,5)
+                return
+            elif (_option == 0):
+                show_screen(3, -1)
+                return
+            else:
+                return ################################# ALTERAR ###################################
+            
+        elif (option == 6): #Alterar senha random
+
+            head()
+            config = open("config.txt", "r")
+            lines = config.readlines()
+            
+            print("\n"+"[ SET PASSWORD ]".center(os.get_terminal_size().columns))
+            print("\n"+bg(15)+cBlack+return_cfg("random_pw").center(os.get_terminal_size().columns)+cReset)
+            print("1 -> Alterar                   0 -> Voltar".center(os.get_terminal_size().columns))
+            _option = Input()
+            if (_option == 1):
+                print("INSERT: ")
+                _random_pw = input()
+                config = open("config.txt", "w")
+                lines[6] = "random_pw='"+_random_pw+"'\n"
+                config.writelines(lines)
+                config.close()
+                show_screen(3,6)
+                return
+            elif (_option == 0):
+                show_screen(3, -1)
+                return
             else:
                 return ################################# ALTERAR ###################################
 
@@ -200,6 +294,10 @@ def Input():
             return 4
         elif    (_input == '5'):
             return 5
+        elif    (_input == '6'):
+            return 6
+        elif    (_input == '7'):
+            return 7
         elif    (_input == '0'):
             return 0
         else:
@@ -236,6 +334,8 @@ def return_cfg(cfg):
         _vpn = config.readline()
         _clear_browser = config.readline()
         _retry_captcha = config.readline()
+        _random_mail = config.readline()
+        _random_pw = config.readline()
         config.close()
         
         if      (cfg == "path"):
@@ -257,12 +357,16 @@ def return_cfg(cfg):
             else:
                 return Exception
         elif    (cfg == "retry_captcha"):
-            if (_retry_captcha[15:-1] == "True"):
+            if (_retry_captcha[15:-2] == "True"):
                 return True
-            elif (_retry_captcha[15:-1] == "False"):
+            elif (_retry_captcha[15:-2] == "False"):
                 return False
             else:
                 return Exception
+        elif    (cfg == "random_mail"):
+                return _random_mail[13:-2]
+        elif    (cfg == "random_pw"):
+                return _random_pw[11:-2]            
         else:
             return Exception
 
@@ -274,6 +378,8 @@ def check_cfg():
         _vpn = config.readline()
         _clear_browser = config.readline()
         _retry_captcha = config.readline()
+        _random_mail = config.readline()
+        _random_pw = config.readline()
         
 
         if (_path[:6] != "PATH='"                           #Primeira linha não é PATH='
@@ -286,7 +392,9 @@ def check_cfg():
         or _clear_browser[:15] != "clear_browser='"         #Quarta linha não é clear_browser='
         or _clear_browser[:16] == "clear_browser=''"        #clear_browser está vazio
         or _retry_captcha[:15] != "retry_captcha='"         #Quinta linha não é retry_captcha='
-        or _retry_captcha[:16] == "retry_captcha=''"):      #retry_captcha está vazio
+        or _retry_captcha[:16] == "retry_captcha=''"        #retry_captcha está vazio
+        or _random_mail[:13] != "random_mail='"             #Sexta linha não é random_mail='
+        or _random_pw[:11] != "random_pw='"):               #Setima linha não é random_pw='
 
             print(cError+get_time()+"Arquivo config.txt configurado incorretamente."+cReset)
             raise OSError
@@ -306,10 +414,10 @@ def check_cfg():
             print(cError+get_time()+"API Key inválido. Se o problema persistir, altere manualmente no .txt"+cReset)
             return 0
         else:
-            print(cMessage+get_time()+"vpn="+cWarning+"'True'"+cMessage+"\n"+get_time()+"clear_browser="+cWarning+"'True'"+cMessage+"\n"+get_time()+"retry_captcha="+cWarning+"'True'"+cReset)
+            print(cMessage+get_time()+"vpn="+cWarning+"'True'"+cMessage+"\n"+get_time()+"clear_browser="+cWarning+"'True'"+cMessage+"\n"+get_time()+"retry_captcha="+cWarning+"'True'"+cMessage+"\n"+get_time()+"random_mail="+cWarning+"''"+cMessage+"\n"+get_time()+"random_pw="+cWarning+"''"+cReset)
             config = open("config.txt", "w+")
             time.sleep(1)
-            config.write("PATH='"+os.getcwd()+"\essentials\chromedriver.exe'\napi_key='"+api__key+"'\nvpn='True'\nclear_browser='True'\nretry_captcha='True'")
+            config.write("PATH='"+os.getcwd()+"\essentials\chromedriver.exe'\napi_key='"+api__key+"'\nvpn='True'\nclear_browser='True'\nretry_captcha='True'\nrandom_mail=''\nrandom_pw=''")
             config.close()
             config_captcha(api__key)
             return 1
@@ -324,7 +432,7 @@ def check_cfg():
 cBlack = fg(0) #Preto
 cError = fg(1) #Vermelho
 cMessage = fg(84) #Verde
-cWarning = fg(3) #Amarelho
+cWarning = fg(11) #Amarelho
 cGreenBg = bg(84) #Fundo verde
 cReset = attr('reset') #Reset
 
