@@ -1,7 +1,0 @@
-PATH='D:\Github\aw_account_creator\essentials\chromedriver.exe'
-api_key='52f971f1abceb987e25cbad14eb79b98'
-vpn='False'
-clear_browser='True'
-retry_captcha='True'
-random_mail=''
-random_pw=''
