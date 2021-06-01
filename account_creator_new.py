@@ -18,6 +18,11 @@ import time
 import string
 import random
 
+#TODO
+#CONFIRMAR VERIFICAÇÃO YOPMAIL
+#OPÇÃO DE LOGIN
+#   SELECIONAR CONTAS DO BOT
+
 def generate_email(): #Gera email aleatório com o <head> do wikipedia.
     print(output(Warn, "Gerando e-mail..."))
     if(return_cfg("random_mail") == ""):
